@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>참부모론 해설 제1장 1. 하늘부모님의 본질 (15분 강의)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1b2a; --bg2:#13283d; --ink:#f6f1e4; --muted:#b9c4d0;
+    --gold:#e3b75b; --line:rgba(227,183,91,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;}
+  #deck{position:fixed;inset:0;background:radial-gradient(ellipse at 20% 0%,var(--bg2),var(--bg) 70%);}
+
+  /* 슬라이드: 왼쪽 본문 + 오른쪽 핵심 한 줄 */
+  .slide{position:absolute;inset:0;display:none;flex-direction:row;align-items:center;gap:4vw;
+    padding:6vh 6vw 8vh;transform-origin:top center}
+  .slide.active{display:flex;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;justify-content:center}
+  .key{flex:0 0 27vw;align-self:center;border-left:6px solid var(--gold);
+    background:rgba(227,183,91,.08);border-radius:0 1.2vw 1.2vw 0;padding:3.2vh 2vw}
+  .key small{display:block;color:var(--gold);font-weight:700;letter-spacing:.14em;
+    font-size:min(1.5vw,2.6vh);margin-bottom:1.8vh}
+  .key p{margin:0;font-family:"Noto Serif KR","Batang",serif;font-weight:700;line-height:1.4;
+    font-size:min(2.8vw,4.9vh);word-break:keep-all}
+
+  .tag{font-size:min(1.9vw,3.3vh);color:var(--gold);font-weight:700;letter-spacing:.08em;margin-bottom:1.8vh}
+  .ttl{font-family:"Noto Serif KR","Batang",serif;font-weight:700;font-size:min(3vw,5.2vh);line-height:1.3;
+    color:var(--gold);margin:0 0 3vh;padding-bottom:2vh;border-bottom:2px solid var(--line);word-break:keep-all}
+  .stmt{font-family:"Noto Serif KR","Batang",serif;font-weight:500;line-height:1.55;margin:0;
+    word-break:keep-all;overflow-wrap:break-word}
+  .s-s{font-size:min(4vw,7vh)}
+  .s-m{font-size:min(3.4vw,5.9vh)}
+  .s-l{font-size:min(2.9vw,5vh)}
+  .s-xl{font-size:min(2.6vw,4.5vh)}
+  .cite{margin-top:3.2vh;padding-left:1.4vw;border-left:4px solid var(--gold);
+    font-size:min(1.7vw,3vh);line-height:1.55;color:var(--muted);word-break:keep-all}
+  .cite b{color:var(--gold)}
+  .cite div+div{margin-top:.8vh}
+
+  /* 표지 */
+  .cover h1{font-family:"Noto Serif KR",serif;font-size:min(5.4vw,9.4vh);line-height:1.28;margin:0 0 3vh;
+    color:var(--gold);word-break:keep-all}
+  .cover .small{font-size:min(2vw,3.5vh);color:var(--muted);margin-bottom:3vh}
+  .cover .sub{font-family:"Noto Serif KR",serif;font-size:min(3vw,5.2vh);margin-bottom:5vh}
+  .cover .hint{font-size:min(1.4vw,2.4vh);color:var(--muted)}
+
+  /* 구분 */
+  .divider .big{font-family:"Noto Serif KR",serif;font-size:min(7vw,12vh);font-weight:700;color:var(--gold);line-height:1;margin-bottom:2.5vh}
+  .divider h2{font-family:"Noto Serif KR",serif;font-size:min(4.6vw,8vh);line-height:1.3;margin:0 0 3vh;word-break:keep-all}
+  .divider .rng{font-size:min(2.2vw,3.8vh);color:var(--muted)}
+
+  /* 하단 표시 */
+  #bar{position:fixed;left:0;bottom:0;height:.8vh;background:var(--gold);width:0;transition:width .3s;z-index:5}
+  #cnt{position:fixed;right:2.2vw;bottom:2.2vh;font-size:min(1.5vw,2.6vh);color:var(--muted)}
+  #sec{position:fixed;left:2.2vw;bottom:2.2vh;font-size:min(1.5vw,2.6vh);color:var(--muted)}
+
+  /* 발표자 원고 — P 키를 누를 때만 보임 */
+  #notes{position:fixed;left:0;right:0;bottom:0;height:40vh;display:none;flex-direction:column;
+    background:#07111c;border-top:3px solid var(--gold);z-index:10}
+  body.notes #notes{display:flex}
+  body.notes .slide{transform:scale(.58)}
+  body.notes #cnt,body.notes #sec{display:none}
+  #nhd{flex:0 0 auto;padding:1.2vh 2vw;font-size:min(1.5vw,2.6vh);color:var(--gold);font-weight:700;
+    border-bottom:1px solid var(--line);display:flex;gap:2vw;flex-wrap:wrap}
+  #nhd .late{color:#ff9d8a}
+  #nhd .ok{color:#9be0b0}
+  #home{position:fixed;left:2.2vw;top:2vh;z-index:6;font-size:min(1.4vw,2.4vh);color:var(--muted);
+    text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:.6vh 1.2vw;opacity:.55}
+  #home:hover{opacity:1;color:var(--gold)}
+  #nbd{flex:1 1 auto;overflow:auto;padding:1.6vh 2vw;font-size:min(2vw,3.6vh);line-height:1.65;
+    color:var(--ink);word-break:keep-all}
+</style>
+</head>
+<body>
+<a id="home" href="./" title="강의 목록 (H)">← 강의 목록</a>
+<div id="deck"></div>
+<div id="sec"></div>
+<div id="cnt"></div>
+<div id="bar"></div>
+<div id="notes"><div id="nhd"></div><div id="nbd"></div></div>
+
+<script>
+const SECTIONS = [
+  {n:"1)", t:"하나님은 창조주 하늘부모님", r:"명제 01 – 04"},
+  {n:"2)", t:"하늘부모님의 심정", r:"명제 05 – 07"},
+  {n:"3)", t:"부모 격위와 성품", r:"명제 08 – 13"},
+  {n:"4)", t:"성상과 형상", r:"명제 14 – 17"},
+  {n:"5)", t:"로고스와 창조성", r:"명제 18 – 21"}
+];
+
+/* time: 초 단위 배정 (합계 900초 = 15분) */
+const S = [
+ {type:"cover", time:30, key:"창조주를 넘어, 부모이신 하나님",
+  note:`안녕하십니까. 오늘은 『참부모론 해설』 제1장 첫 절, ‘하늘부모님의 본질’을 15분 동안 함께 살펴보겠습니다. 명제가 스물한 개이니 한 명제에 40초 안팎입니다. 다섯 개의 항을 따라가며, 마지막에 오늘 꼭 가져가실 한 가지를 말씀드리겠습니다.`},
+
+ {type:"divider", sec:0, time:10, key:"근원은 하나, 그분은 우리의 부모",
+  note:`첫째 항입니다. 하나님은 창조주 하늘부모님이십니다.`},
+ {type:"prop", sec:0, n:1, time:30, title:"원인 없는 결과란 없다", key:"모든 결과에는 원인이 있고, 그 끝은 하나",
+  stmt:"모든 존재는 결과적 존재이므로, 원인을 거슬러 올라가면 모든 것을 존재케 한 하나의 궁극적 원인에 이른다.",
+  note:`이 세상에 스스로 원인이 되어 생겨난 것은 없습니다. 모든 존재는 결과입니다. 그 원인을 거슬러 올라가면 결국 하나의 궁극적 원인에 이르게 됩니다. 그러면 질문이 생깁니다. 그 궁극적 본체는 누구이시며, 원인자는 어떤 분이십니까? 이것이 오늘 말씀의 출발점입니다.`},
+ {type:"prop", sec:0, n:2, time:40, title:"궁극적 원인자는 하나이며 창조주 하늘부모님이시다", key:"이름은 달라도 근원은 하나, 우리는 ‘부모’라 부른다",
+  stmt:"여러 종교가 신을 다른 이름으로 불러왔으나 근원은 하나이며, 그분은 인류를 낳은 분이므로 ‘창조주 하늘부모님’이라 부른다.",
+  note:`사람들은 그분을 야훼, 엘로힘, 갓, 알라, 또는 하늘, 상제, 브라만, 도라고 불러 왔습니다. 그러나 궁극적 근원은 둘이 될 수 없습니다. 문명권마다 표현이 달랐을 뿐 같은 한 분입니다. 그분은 온 우주를 창조하시고 전 인류를 낳아 주신 분입니다. 낳아 주신 분을 부모가 아닌 다른 이름으로 부르는 것은 부자연스럽지요. 그래서 우리는 ‘창조주 하늘부모님’이라 부릅니다.`},
+ {type:"prop", sec:0, n:3, time:40, title:"하나님은 인류의 하늘부모님", key:"창조주이기 전에 부모이시다",
+  stmt:"하늘부모님은 형상대로 만물을 양성·음성 쌍으로 지으셨고, 인간을 자녀로서 가장 닮게 지으셨기에 인간과는 부모-자녀 관계이다.",
+  q:[["창 1:27","자기 형상 곧 하나님의 형상대로 사람을 창조하시되 남자와 여자를 창조하시고"]],
+  note:`창세기 1장 27절은 하나님이 자기 형상대로 사람을 창조하시되 남자와 여자를 창조하셨다고 말합니다. 그래서 만물은 양성과 음성이 쌍을 이룹니다. 만물은 하늘부모님을 상징적으로 닮았지만, 인간은 형상적·실체적으로 닮았습니다. 자녀로 창조되었기 때문입니다. 그러니 하늘부모님과 인간은 단순한 창조주와 피조물이 아니라, 부모와 자녀의 관계입니다.`},
+ {type:"prop", sec:0, n:4, time:40, title:"하늘부모님 아래 인류 한 가족", key:"부모를 찾았으니, 우리는 형제자매",
+  stmt:"하늘부모님이 온 인류의 부모이므로 인간끼리는 형제자매이며, 우리가 지향할 세계는 ‘하늘부모님 아래 인류 한 가족’이다.",
+  note:`인류는 부모를 잃은 고아처럼 하늘부모님을 모르고 살아왔습니다. 수많은 종교도 신과 인간이 부모 자녀 관계라는 사실을 온전히 알지 못했습니다. 이제 부모를 찾은 기쁨으로 하늘부모님을 삶 속에 모셔야 합니다. 하늘부모님이 모든 인류의 부모라면 우리는 서로 형제자매입니다. 우리가 바라는 세계가 곧 ‘하늘부모님 아래 인류 한 가족’입니다.`},
+
+ {type:"divider", sec:1, time:10, key:"사랑하고픈 심정이 창조의 동기",
+  note:`둘째 항, 하늘부모님의 심정입니다.`},
+ {type:"prop", sec:1, n:5, time:35, title:"하늘부모님은 사랑이시다", key:"사랑으로 시작해 사랑으로 끝나는 분",
+  stmt:"하늘부모님은 사랑의 본체이시며, 그 사랑은 절대·유일·불변·영원한 참사랑으로 세우신 뜻을 반드시 이루신다.",
+  q:[["요일 4:16","하나님은 사랑이시라"]],
+  note:`하늘부모님의 속성은 사랑의 속성과 같아서 절대, 유일, 불변, 영원합니다. 요한일서 4장 16절, 하나님은 사랑이십니다. 그 사랑은 아기에게 젖을 물리는 어머니처럼 주고 잊고 또 주는 한없는 사랑입니다. 사랑이 변하지 않으니, 상대를 위해 세우신 뜻을 어떤 어려움에도 포기하지 않고 반드시 이루십니다.`},
+ {type:"prop", sec:1, n:6, time:40, title:"참사랑의 근원인 심정", key:"심정은 사랑할수록 깊어지는 샘",
+  stmt:"참사랑은 하늘부모님의 심정에서 비롯되며, 심정이란 한없이 사랑하고 기쁨을 얻고자 하는 정적(情的) 충동으로 사랑할수록 깊어지는 샘이다.",
+  q:[["요 4:14","내가 주는 물을 먹는 자는 영원히 목마르지 아니하리니 나의 주는 물은 그 속에서 영생하도록 솟아나는 샘물이 되리라"]],
+  note:`그 참사랑은 어디서 나옵니까. 심정에서 나옵니다. 심정은 한없이 사랑하고 싶고, 사랑을 통해 기쁨을 얻고 싶은 정적인 충동입니다. 상대를 위해 모든 것을 투입하고 또 투입하고 싶은 마음의 근원입니다. 마르지 않는 샘에 비유할 수 있습니다. 사랑할수록 샘은 더 깊고 충만해집니다. 요한복음 4장 14절의 솟아나는 샘물을 떠올려 보십시오.`},
+ {type:"prop", sec:1, n:7, time:40, title:"심정은 창조의 동기", key:"사랑의 상대를 향한 그리움이 창조의 동기",
+  stmt:"사랑은 반드시 상대가 있어야 하므로, 사랑의 기쁨을 나눌 상대를 염원한 하늘부모님의 심정이 창조의 동기가 되었고, 모든 존재의 목적도 오직 사랑이다.",
+  note:`사랑은 혼자서 할 수 없습니다. 반드시 상대가 있어야 합니다. 홀로 계셔서 외로우셨던 하늘부모님은 사랑의 기쁨을 나눌 상대를 간절히 염원하셨고, 그 마음이 창조의 동기가 되었습니다. 그래서 창조는 우연이 아니라 필연입니다. 자녀인 인간과 함께 살 집인 천주를 창조하셨고, 작은 돌멩이부터 온 우주까지 모든 존재의 목적도 오직 사랑입니다.`},
+
+ {type:"divider", sec:2, time:10, key:"한 분이시되 두 격위",
+  note:`셋째 항, 부모 격위와 성품입니다. 오늘 가장 오래 머무를 대목입니다.`},
+ {type:"prop", sec:2, n:8, time:35, title:"자녀 탄생을 위해선 부모가 필요", key:"자녀는 아버지·어머니가 함께 있어야 태어난다",
+  stmt:"자녀는 아버지·어머니가 함께 있어야 태어나므로, 인류의 부모이신 하늘부모님도 하늘아버지인 동시에 하늘어머니로 존재하신다.",
+  note:`자녀는 아버지 혼자서도, 어머니 혼자서도 낳을 수 없습니다. 아버지와 어머니가 함께 계셔야 태어납니다. 하늘부모님이 인류의 부모이시라면, 하늘아버지인 동시에 하늘어머니로 존재하십니다. 천지창조부터 인간 탄생까지 오랜 시간이 걸린 것은, 자녀를 낳기 위한 잉태와 출산의 노정과 같다고 봅니다.`},
+ {type:"prop", sec:2, n:9, time:40, title:"당신의 형상대로 (Imago Dei)", key:"하나님의 형상 = 아버지 격위 + 어머니 격위",
+  stmt:"‘자기 형상대로’ 남녀를 지으셨다는 것은 하나님의 형상이 곧 하늘아버지와 하늘어머니의 격위와 성품임을 뜻하며, 그것이 차원을 달리하여 실체로 분립된 피조물을 분성실체라 한다.",
+  q:[["창 1:27","하나님이 자기 형상 곧 하나님의 형상대로 사람을 창조하시되 남자와 여자를 창조하시고"]],
+  note:`창세기의 ‘자기 형상대로’를 다시 보겠습니다. 하나님의 형상이란 곧 하늘아버지와 하늘어머니의 격위와 성품입니다. 그것이 차원을 달리해 실체로 나뉘어 세워진 피조물을 분성실체라 합니다. 그래서 피조만물은 쌍을 이루어 사랑을 주고받습니다. 저차원에서는 상징적으로, 고차원으로 갈수록 형상적·실체적으로 하늘부모님을 닮습니다.`},
+ {type:"prop", sec:2, n:10, time:45, title:"아버지격위와 어머니격위", key:"두 신이 아니라, 한 분의 두 격위",
+  stmt:"하늘부모님은 두 신이 아니라 한 분이시면서 남성격위와 여성격위를 함께 지니시므로, 하늘아버지로도 하늘어머니로도 드러나실 수 있다.",
+  q:[["신 32:18","너를 낳은 반석을 네가 상관하지 아니하고 너를 내신 하나님을 네가 잊었도다"],
+     ["사 66:13","어미가 자식을 위로함 같이 내가 너희를 위로할 것인즉"],
+     ["마 23:37","암탉이 그 새끼를 날개 아래에 모음 같이 내가 네 자녀를 모으려 한 일이 몇 번이더냐"]],
+  note:`그렇다고 신이 두 분인 것은 아닙니다. 하늘부모님은 한 분이시면서 남성격위와 여성격위를 함께 지니십니다. 자녀의 눈에는 아버지로도 어머니로도 나타나십니다. 지금까지 대부분의 종교에서 신은 남성으로 이해되었지만, 경전에는 여성적 언어도 분명 있습니다. 신명기 32장 18절 ‘너를 낳은 반석’, 이사야 66장 13절 ‘어미가 자식을 위로함 같이’, 마태복음 23장 37절 ‘암탉이 그 새끼를 날개 아래에 모음 같이’입니다.`},
+ {type:"prop", sec:2, n:11, time:30, title:"격위와 성품", key:"구분되지만 분리되지 않는다",
+  stmt:"격위와 성품은 표리일체·불가분의 관계여서, 하늘부모님은 부성(남성)과 모성(여성)이 하나 된 본체이며 구분되지만 분리되지 않는다.",
+  note:`격위와 성품은 겉과 속처럼 떼어 놓을 수 없습니다. 아버지 격위에는 남성적 성품이, 어머니 격위에는 여성적 성품이 있습니다. 구분은 되지만 분리는 되지 않습니다. 하늘아버지로 나타나셔도 그 안에 하늘어머니가 하나 되어 계시고, 하늘어머니로 나타나셔도 그 안에 하늘아버지가 하나 되어 계십니다.`},
+ {type:"prop", sec:2, n:12, time:40, title:"양성과 음성", key:"모든 존재는 짝을 이루어 사랑을 주고받는다",
+  stmt:"부성·모성이 실체로 분립되어 세계가 창조되었으며, 고차원에서는 성별로 저차원에서는 존재의 속성으로 나타나 모든 존재가 양성·음성으로 수수작용한다.",
+  note:`이 부성과 모성이 실체로 나뉘어 세계가 창조되었습니다. 인간은 남자와 여자, 동물은 수컷과 암컷, 식물은 수술과 암술, 원자는 양전하의 원자핵과 음전하의 전자로 짝을 이룹니다. 아버지의 사랑과 어머니의 사랑은 이끄는 면과 포용하는 면을 함께 지니지만 방식이 다릅니다. 그 다름이 서로를 채워 주기에, 두 사랑이 합쳐질 때 자녀가 온전한 사랑 안에서 자랍니다.`},
+ {type:"prop", sec:2, n:13, time:40, title:"한 분이신 하늘부모님", key:"둘이면서 하나 — 어버이",
+  stmt:"하늘부모님은 참사랑의 심정을 중심으로 하늘아버지·하늘어머니의 격위·성품이 완전히 통일된 한 분이시며, ‘어버이’처럼 심층에서 한 분이심을 체휼할 수 있다.",
+  note:`한 분이시면서 두 격위로 존재하신다는 말이 모순처럼 들릴 수 있습니다. 그런데 우리 한국어에는 ‘어버이’라는 말이 있습니다. 아버지와 어머니를 하나로 아우르는 단수 명사입니다. 자녀는 부모를 둘이면서 하나인 존재로 느끼며 어버이라 부릅니다. 그처럼 우리도 하늘아버지, 하늘어머니로 구분해 경험하더라도, 본체에 있어서는 한 분이심을 체휼할 수 있습니다.`},
+
+ {type:"divider", sec:3, time:10, key:"마음과 몸 — 성상과 형상",
+  note:`넷째 항, 성상과 형상입니다.`},
+ {type:"prop", sec:3, n:14, time:30, title:"성상과 형상을 닮은 피조세계", key:"하늘부모님은 인격적 존재이시다",
+  stmt:"하늘부모님은 심정을 기반으로 성상(내성적·정신적 양상)과 형상(외형적·물질적 양상)을 갖춘 인격적 존재이시며, 모든 피조물도 성상·형상의 통일체로 존재한다.",
+  note:`하늘부모님은 무한한 힘이나 비인격적 원리가 아니라, 인격적 존재이십니다. 심정을 바탕으로 성상과 형상을 갖추셨습니다. 성상은 정신적 양상, 형상은 물질적 양상으로, 인간으로 치면 마음과 몸입니다. 그분을 닮아 창조된 모든 존재도 예외 없이 성상과 형상의 통일체입니다.`},
+ {type:"prop", sec:3, n:15, time:40, title:"하늘부모님의 본성상", key:"정·지·의의 마음, 미·진·선의 가치",
+  stmt:"하늘부모님의 성상은 만유 성상의 근원인 본성상(本性相)이며, 정·지·의의 마음으로서 심정을 터로 정·지·의를 통해 미·진·선의 가치가 세워진다.",
+  note:`하늘부모님의 마음, 곧 본성상은 정, 지, 의 세 기능으로 이루어집니다. 정은 희로애락을 느끼는 능력, 지는 인식하는 능력, 의는 욕구하고 결단하는 의욕성입니다. 이 셋은 심정에서 나와 사랑하는 상대를 위해 쓰입니다. 사랑하면 할수록 상대가 더 아름답고, 참되고, 선해 보입니다. 그래서 미, 진, 선이 정, 지, 의를 채우는 궁극적 가치가 됩니다.`},
+ {type:"prop", sec:3, n:16, time:30, title:"무형의 하늘부모님도 꼴이 있으시다", key:"무형이시나 마음의 꼴이 있으시다",
+  stmt:"하늘부모님은 무형이시지만 본성상 안에 정·지·의 기능의 결과인 다양한 심상(마음의 꼴) — 관념·개념·원칙·수리 — 을 지니신다.",
+  note:`하늘부모님은 무형이십니다. 그러나 마음속에는 꼴이 있습니다. 관념은 하나하나의 구체적 표상이고, 개념은 공통 요소를 추려 낸 표상입니다. 사발, 접시, 대접, 항아리에서 ‘그릇’이라는 개념을 얻는 것과 같습니다. 원칙은 법칙의 근본 원인이고, 수리는 수적 현상의 근원입니다.`},
+ {type:"prop", sec:3, n:17, time:40, title:"하늘부모님의 본형상", key:"본형상 — 보이지 않는 몸",
+  stmt:"하늘부모님의 형상은 만유 형상(물질적 요소)의 근원인 본형상(本形狀)이며, 하늘부모님의 보이지 않는 몸으로서 유형적 실재와 시공간 자체를 존재케 한 근원이다.",
+  note:`본형상은 하늘부모님의 보이지 않는 몸과 같습니다. 인간의 몸, 동물의 육, 식물의 세포, 광물의 원자까지 모든 형상의 궁극적 원인입니다. 기존 종교는 신을 물질과 상관없는 영으로만 이해해 왔지만, 하늘부모님은 본성상과 본형상이 하나로 통일된 분이십니다. 그래서 이 세계의 형상이 본형상을 닮아 창조되었고, 유형적 실재와 시공간 자체도 그 근원에서 나왔습니다.`},
+
+ {type:"divider", sec:4, time:10, key:"청사진과 질서",
+  note:`마지막 다섯째 항, 로고스와 창조성입니다.`},
+ {type:"prop", sec:4, n:18, time:35, title:"로고스란?", key:"로고스는 창조의 청사진",
+  stmt:"요한복음의 ‘말씀’ 로고스는 하늘부모님의 사유이자 말씀으로서, 세계를 창조하기 위해 세우신 피조세계의 청사진(설계도)이다.",
+  q:[["요 1:1~3","태초에 말씀이 계시니라 이 말씀이 하나님과 함께 계셨으니 이 말씀은 곧 하나님이시니라 … 만물이 그로 말미암아 지은 바 되었으니"]],
+  note:`요한복음 1장 1절, ‘태초에 말씀이 계시니라.’ 말씀의 헬라어 원어는 로고스입니다. 말, 이성, 원리, 질서를 뜻합니다. 로고스는 하늘부모님의 사유이자 말씀이며, 특히 세계를 창조하시려고 세우신 사고와 구상과 계획입니다. 건축가가 집을 짓기 전에 설계도를 그리는 것과 같습니다. 한마디로 피조세계의 청사진입니다.`},
+ {type:"prop", sec:4, n:19, time:45, title:"이성과 법칙의 통일 (이법)", key:"법칙 위에서 누리는 참된 자유",
+  stmt:"로고스는 마음의 기능인 이성과 마음의 꼴인 법칙으로 세워져 이법(理法)이라 하며, 만물에는 이성적 요소(자유성)와 법칙적 요소(필연성)가 통일적으로 내포된다.",
+  note:`로고스는 이성과 법칙으로 세워졌기에 이법이라고도 합니다. 그래서 만물에는 이성적 요소, 곧 자유성과 법칙적 요소, 곧 필연성이 함께 들어 있습니다. 인간처럼 고차원일수록 자유성이 크고, 저차원일수록 법칙에 기계적으로 따릅니다. 모순 같지만 레일 위의 기차와 같습니다. 기차는 레일 위에서만 자유롭게 달립니다. 인간도 법칙에 순응해 사랑의 창조목적을 이룰 때 참된 자유를 누립니다.`},
+ {type:"prop", sec:4, n:20, time:35, title:"이법의 하늘부모님", key:"사랑은 질서를 통해 흐른다",
+  stmt:"하늘부모님은 참사랑이 이법(질서)을 통해 실현되게 하시며, 한번 세우신 법칙은 하늘부모님도 바꾸지 않고 절대적으로 따르신다.",
+  note:`하늘부모님은 무조건적 사랑을 베푸시되 아무렇게나 베푸시지 않습니다. 전기가 규칙적으로 배열된 전선을 따라 흐르듯, 로고스는 사랑이 흐르는 길입니다. 그래서 한번 세우신 법칙은 하늘부모님도 마음대로 바꾸지 않고 절대적으로 따르십니다. 부모와 자식, 부부, 형제자매 사이의 사랑의 질서는 시대와 문화를 넘어서는 영원한 규범입니다.`},
+ {type:"prop", sec:4, n:21, time:30, title:"하늘부모님의 창조성", key:"구상이 먼저, 실체는 그다음",
+  stmt:"창조는 구상(내적 창조)과 실체(외적 창조)의 두 단계로 이루어지며, 하늘부모님은 로고스를 먼저 창조하고 본형상을 투입해 세계를 창조하는 무한한 창조성을 지니신다.",
+  note:`창조는 두 단계입니다. 먼저 구상, 곧 내적 창조입니다. 사랑의 상대를 염원하는 심정으로 창조목적을 세우고, 마음속에 청사진인 로고스를 창조하셨습니다. 그다음이 외적 창조입니다. 그 구상 위에 본형상을 투입해 세계를 창조하셨습니다. 인간의 과학, 예술, 건축, 농업 같은 창조성의 근원도 여기에 있습니다.`},
+
+ {type:"closing", time:40, key:"하늘부모님 아래 인류 한 가족",
+  title:"오늘의 한 가지",
+  stmt:"하나님은 단순한 창조주가 아니라, 우리의 부모이시다.",
+  note:`오늘 말씀을 한 문장으로 줄이면 이렇습니다. 하나님은 단순한 창조주가 아니라 우리의 부모이십니다. 그 심정에서 사랑이 나왔고, 그 사랑으로 우리가 태어났으며, 그 사랑은 질서를 따라 흐릅니다. 하늘부모님을 부모로 모신다면 우리는 서로 형제자매입니다. 이 한 가지를 오늘 가져가시기 바랍니다. 감사합니다.`}
+];
+
+/* 누적 시간 계산 */
+let acc = 0;
+S.forEach(s=>{ s.start = acc; acc += s.time; s.end = acc; });
+const TOTAL = acc;
+if(TOTAL !== 900) console.warn("시간 합계가 15분(900초)이 아닙니다:", TOTAL);
+
+const pad = n => String(n).padStart(2,"0");
+const fmt = sec => { sec = Math.max(0, Math.round(sec)); return Math.floor(sec/60) + ":" + pad(sec%60); };
+const sizeClass = len => len<=55?"s-s":len<=90?"s-m":len<=125?"s-l":"s-xl";
+
+const deck = document.getElementById("deck");
+S.forEach(s=>{
+  const el = document.createElement("section");
+  el.className = "slide";
+  let main = "";
+  if(s.type==="cover"){
+    el.classList.add("cover");
+    main = `
+      <div class="small">15분 강의</div>
+      <h1>『참부모론 해설』<br>제1장 하늘부모님과 창조</h1>
+      <div class="sub">1. 하늘부모님의 본질</div>
+      <div class="hint">← → 넘김 · F 전체화면 · P 발표자 원고 · T 타이머 · H 목록</div>`;
+  }else if(s.type==="divider"){
+    const d = SECTIONS[s.sec];
+    el.classList.add("divider");
+    el.dataset.sec = d.n + " " + d.t;
+    main = `<div class="big">${d.n}</div><h2>${d.t}</h2><div class="rng">${d.r}</div>`;
+  }else if(s.type==="closing"){
+    main = `
+      <div class="tag">정리</div>
+      <h2 class="ttl">${s.title}</h2>
+      <p class="stmt s-s">${s.stmt}</p>`;
+  }else{
+    const d = SECTIONS[s.sec];
+    el.dataset.sec = d.n + " " + d.t;
+    const cite = (s.q||[]).map(([r,t])=>`<div><b>${r}</b> 「${t}」</div>`).join("");
+    main = `
+      <div class="tag">명제 ${pad(s.n)}</div>
+      <h2 class="ttl">${s.title}</h2>
+      <p class="stmt ${sizeClass(s.stmt.length)}">${s.stmt}</p>
+      ${cite?`<div class="cite">${cite}</div>`:""}`;
+  }
+  el.innerHTML = `<div class="main">${main}</div><aside class="key"><small>핵심 한 줄</small><p>${s.key}</p></aside>`;
+  deck.appendChild(el);
+});
+
+const els = [...document.querySelectorAll(".slide")];
+const cnt = document.getElementById("cnt"), bar = document.getElementById("bar"), secEl = document.getElementById("sec");
+const nhd = document.getElementById("nhd"), nbd = document.getElementById("nbd");
+let cur = 0;
+
+/* 타이머 */
+let running = false, accMs = 0, t0 = 0;
+const elapsed = () => (accMs + (running ? Date.now() - t0 : 0)) / 1000;
+
+function renderNotes(){
+  const s = S[cur];
+  const e = elapsed();
+  const diff = e - s.start;
+  let state = "";
+  if(running || e > 0){
+    const d = Math.round(diff);
+    state = Math.abs(d) <= 10 ? `<span class="ok">일정대로</span>`
+          : d > 0 ? `<span class="late">+${fmt(d)} 지연</span>`
+          : `<span class="ok">−${fmt(-d)} 여유</span>`;
+  }
+  nhd.innerHTML =
+    `<span>${cur+1} / ${S.length}</span>` +
+    `<span>배정 ${fmt(s.time)}</span>` +
+    `<span>계획 ${fmt(s.start)} ~ ${fmt(s.end)} / 총 ${fmt(TOTAL)}</span>` +
+    `<span>경과 ${fmt(e)}${running ? "" : (e>0 ? " (정지)" : " (T로 시작)")}</span>` + state;
+}
+
+function show(i){
+  cur = Math.max(0, Math.min(els.length-1, i));
+  els.forEach((e,k)=>e.classList.toggle("active", k===cur));
+  cnt.textContent = (cur+1) + " / " + els.length;
+  bar.style.width = ((cur+1)/els.length*100) + "%";
+  secEl.textContent = els[cur].dataset.sec || "";
+  nbd.textContent = S[cur].note;
+  nbd.scrollTop = 0;
+  renderNotes();
+  history.replaceState(null,"","#"+(cur+1));
+}
+const next = ()=>show(cur+1), prev = ()=>show(cur-1);
+setInterval(()=>{ if(document.body.classList.contains("notes")) renderNotes(); }, 500);
+
+document.addEventListener("keydown", e=>{
+  const k = e.key;
+  if(["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(k)){ e.preventDefault(); next(); }
+  else if(["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(k)){ e.preventDefault(); prev(); }
+  else if(k==="Home"){ show(0); }
+  else if(k==="End"){ show(els.length-1); }
+  else if(k==="p"||k==="P"){ document.body.classList.toggle("notes"); renderNotes(); }
+  else if(k==="t"||k==="T"){
+    if(running){ accMs += Date.now() - t0; running = false; }
+    else { t0 = Date.now(); running = true; }
+    renderNotes();
+  }
+  else if(k==="r"||k==="R"){ running = false; accMs = 0; renderNotes(); }
+  else if(k==="h"||k==="H"){ location.href = "./"; }
+  else if(k==="f"||k==="F"){
+    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  }
+});
+document.addEventListener("click", e=>{
+  if(e.target.closest("#notes,#home")) return;
+  (e.clientX < innerWidth/3) ? prev() : next();
+});
+let sx = null;
+document.addEventListener("touchstart", e=>{ sx = e.touches[0].clientX; }, {passive:true});
+document.addEventListener("touchend", e=>{
+  if(sx===null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+  sx = null;
+});
+
+if(new URLSearchParams(location.search).has("notes")) document.body.classList.add("notes");
+const start = parseInt(location.hash.slice(1),10);
+show(isNaN(start) ? 0 : start-1);
+</script>
+</body>
+</html>
