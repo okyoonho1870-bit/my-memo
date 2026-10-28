@@ -6,6 +6,7 @@
      - series : 묶음(시리즈) 이름 — 같은 이름끼리 함께 모여 보입니다
      - status : "완료" 또는 "준비중"
      - date   : 강의(예정)일, "YYYY-MM-DD"
+  3) 다른 사이트에 있는 자료는 file 대신 url 에 전체 주소를 적습니다. (새 탭으로 열림)
 */
 window.LECTURES = [
   {
@@ -19,5 +20,14 @@ window.LECTURES = [
     date: "2026-10-28",
     summary: "하나님은 단순한 창조주가 아니라 우리의 부모이시다 — 명제 21개, 5개 항.",
     tags: ["하늘부모님", "심정", "성상·형상", "로고스"]
+  },
+  {
+    url: "https://hs-os-2.vercel.app/chambumo-interview.html",
+    series: "인터뷰 자료",
+    title: "참부모론 인터뷰",
+    status: "완료",
+    date: "2026-10-28",
+    summary: "참부모론 인터뷰 자료 — 외부 사이트에서 열립니다.",
+    tags: ["참부모론", "인터뷰"]
   }
 ];

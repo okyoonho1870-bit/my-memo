@@ -69,7 +69,7 @@
   </header>
 
   <div class="tools">
-    <input id="q" type="search" placeholder="제목·장·태그로 찾기" aria-label="강의 검색">
+    <input id="q" type="search" placeholder="제목·장·태그로 찾기" aria-label="자료 검색">
     <button class="chip" data-f="전체" aria-pressed="true">전체</button>
     <button class="chip" data-f="완료" aria-pressed="false">완료</button>
     <button class="chip" data-f="준비중" aria-pressed="false">준비중</button>
@@ -82,6 +82,7 @@
     <ol>
       <li>만든 슬라이드 HTML 파일을 <code>lectures</code> 폴더에 넣습니다. (예: <code>chambumo-1-2.html</code>)</li>
       <li><code>lectures/lectures.js</code>를 열고 기존 강의 한 덩어리 <code>{ … }</code>를 복사해 붙인 뒤 파일 이름·제목·시간 등을 고칩니다.</li>
+      <li>다른 사이트에 있는 자료(인터뷰 등)는 파일을 넣지 않고 <code>file</code> 대신 <code>url</code>에 전체 주소를 적으면 됩니다.</li>
       <li>저장(커밋)하면 이 목록에 바로 나타납니다.</li>
     </ol>
     슬라이드 안에서는 <code>←</code> <code>→</code> 넘김 · <code>F</code> 전체화면 · <code>P</code> 발표자 원고 · <code>T</code> 타이머 · <code>H</code> 목록으로.
@@ -91,7 +92,8 @@
 
 <script src="lectures.js"></script>
 <script>
-const ALL = (window.LECTURES || []).slice().sort((a,b)=> (a.series||"").localeCompare(b.series||"") || (a.file).localeCompare(b.file));
+const ALL = (window.LECTURES || []).map(l => ({...l, file: l.file || l.url}))
+  .sort((a,b)=> (a.series||"").localeCompare(b.series||"") || a.file.localeCompare(b.file));
 const store = {
   get(){ try{ return JSON.parse(localStorage.getItem("lecture-seen")||"{}"); }catch(e){ return {}; } },
   set(file){ try{ const m = store.get(); m[file] = Date.now(); localStorage.setItem("lecture-seen", JSON.stringify(m)); }catch(e){} }
@@ -104,7 +106,7 @@ function renderStats(){
   const done = ALL.filter(l=>l.status==="완료").length;
   const series = new Set(ALL.map(l=>l.series)).size;
   document.getElementById("stats").innerHTML =
-    `<div><b>${ALL.length}</b>강의</div><div><b>${series}</b>시리즈</div>` +
+    `<div><b>${ALL.length}</b>자료</div><div><b>${series}</b>시리즈</div>` +
     `<div><b>${done}</b>완료</div><div><b>${Math.floor(mins/60)?Math.floor(mins/60)+"시간 ":""}${mins%60}분</b>총 강의 시간</div>`;
 }
 
@@ -115,11 +117,11 @@ function render(){
     (filter==="전체" || l.status===filter) &&
     (!q || [l.series,l.chapter,l.title,l.summary,...(l.tags||[])].join(" ").toLowerCase().includes(q)));
   const list = document.getElementById("list");
-  if(!rows.length){ list.innerHTML = `<p class="empty">해당하는 강의가 없습니다.</p>`; return; }
+  if(!rows.length){ list.innerHTML = `<p class="empty">해당하는 자료가 없습니다.</p>`; return; }
   const groups = {};
   rows.forEach(l => (groups[l.series||"기타"] ||= []).push(l));
   list.innerHTML = Object.entries(groups).map(([name, ls]) => `
-    <h2>${esc(name)} <small>${ls.length}강</small></h2>
+    <h2>${esc(name)} <small>${ls.length}개</small></h2>
     <div class="grid">${ls.map(l => `
       <article class="card">
         <div class="meta"><span>${esc(l.date||"")}</span>
@@ -133,9 +135,10 @@ function render(){
           ${l.slides?`<span>▤ 슬라이드 ${esc(l.slides)}장</span>`:""}
           ${seen[l.file]?`<span class="seen">최근 열람 ${new Date(seen[l.file]).toLocaleDateString("ko-KR")}</span>`:""}
         </div>
-        <div class="actions">
+        <div class="actions">${l.url ? `
+          <a class="btn main" href="${esc(l.url)}" target="_blank" rel="noopener" data-file="${esc(l.file)}">자료 열기 ↗</a>` : `
           <a class="btn main" href="${esc(l.file)}" data-file="${esc(l.file)}">발표 시작</a>
-          <a class="btn sub" href="${esc(l.file)}?notes=1" data-file="${esc(l.file)}">발표자 모드</a>
+          <a class="btn sub" href="${esc(l.file)}?notes=1" data-file="${esc(l.file)}">발표자 모드</a>`}
         </div>
       </article>`).join("")}
     </div>`).join("");
