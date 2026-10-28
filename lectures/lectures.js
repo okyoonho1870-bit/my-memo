@@ -14,12 +14,12 @@ window.LECTURES = [
     series: "참부모론 해설",
     chapter: "제1장 하늘부모님과 창조",
     title: "1. 하늘부모님의 본질",
-    minutes: 15,
+    minutes: 18,
     slides: 28,
     status: "완료",
     date: "2026-10-28",
-    summary: "하나님은 단순한 창조주가 아니라 우리의 부모이시다 — 명제 21개, 5개 항.",
-    tags: ["하늘부모님", "심정", "성상·형상", "로고스"]
+    summary: "명제 21개를 도식과 키워드로 — 하나님은 단순한 창조주가 아니라 우리의 부모이시다.",
+    tags: ["명제·도식", "하늘부모님", "심정", "성상·형상", "로고스"]
   },
   {
     url: "https://hs-os-2.vercel.app/chambumo-interview.html",
