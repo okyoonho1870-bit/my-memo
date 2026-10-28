@@ -85,7 +85,7 @@
       <li>다른 사이트에 있는 자료(인터뷰 등)는 파일을 넣지 않고 <code>file</code> 대신 <code>url</code>에 전체 주소를 적으면 됩니다.</li>
       <li>저장(커밋)하면 이 목록에 바로 나타납니다.</li>
     </ol>
-    슬라이드 안에서는 <code>←</code> <code>→</code> 넘김 · <code>F</code> 전체화면 · <code>P</code> 발표자 원고 · <code>T</code> 타이머 · <code>H</code> 목록으로.
+    슬라이드 안에서는 <code>←</code> <code>→</code> 넘김 · <code>F</code> 전체화면 · <code>P</code> 발표자 창 열기 · <code>H</code> 목록으로. 발표자 창에서는 <code>T</code> 타이머 · <code>R</code> 리셋 · <code>+</code> <code>−</code> 원고 글자 크기.
   </details>
   <footer><a href="../">← 메모장으로</a></footer>
 </div>
@@ -138,7 +138,7 @@ function render(){
         <div class="actions">${l.url ? `
           <a class="btn main" href="${esc(l.url)}" target="_blank" rel="noopener" data-file="${esc(l.file)}">자료 열기 ↗</a>` : `
           <a class="btn main" href="${esc(l.file)}" data-file="${esc(l.file)}">발표 시작</a>
-          <a class="btn sub" href="${esc(l.file)}?notes=1" data-file="${esc(l.file)}">발표자 모드</a>`}
+          <a class="btn sub" href="${esc(l.file)}?notes=1" data-file="${esc(l.file)}" data-presenter="1" title="청중 화면 + 별도 발표자 창">발표자 모드 ⧉</a>`}
         </div>
       </article>`).join("")}
     </div>`).join("");
@@ -152,7 +152,14 @@ document.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () =
 }));
 document.getElementById("list").addEventListener("click", e => {
   const a = e.target.closest("a[data-file]");
-  if(a) store.set(a.dataset.file);
+  if(!a) return;
+  store.set(a.dataset.file);
+  /* 발표자 모드: 발표자 창을 새 창으로 띄우고, 이 탭은 청중 화면이 됨 */
+  if(a.dataset.presenter){
+    e.preventDefault();
+    window.open(a.dataset.file + "?presenter", "presenter-" + a.dataset.file, "width=1200,height=800");
+    location.href = a.dataset.file;
+  }
 });
 renderStats();
 render();
