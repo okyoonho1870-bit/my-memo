@@ -61,21 +61,45 @@
   #cnt{position:fixed;right:2.2vw;bottom:2.2vh;font-size:min(1.5vw,2.6vh);color:var(--muted)}
   #sec{position:fixed;left:2.2vw;bottom:2.2vh;font-size:min(1.5vw,2.6vh);color:var(--muted)}
 
-  /* 발표자 원고 — P 키를 누를 때만 보임 */
-  #notes{position:fixed;left:0;right:0;bottom:0;height:40vh;display:none;flex-direction:column;
-    background:#07111c;border-top:3px solid var(--gold);z-index:10}
-  body.notes #notes{display:flex}
-  body.notes .slide{transform:scale(.58)}
-  body.notes #cnt,body.notes #sec{display:none}
-  #nhd{flex:0 0 auto;padding:1.2vh 2vw;font-size:min(1.5vw,2.6vh);color:var(--gold);font-weight:700;
-    border-bottom:1px solid var(--line);display:flex;gap:2vw;flex-wrap:wrap}
-  #nhd .late{color:#ff9d8a}
-  #nhd .ok{color:#9be0b0}
   #home{position:fixed;left:2.2vw;top:2vh;z-index:6;font-size:min(1.4vw,2.4vh);color:var(--muted);
     text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:.6vh 1.2vw;opacity:.55}
   #home:hover{opacity:1;color:var(--gold)}
-  #nbd{flex:1 1 auto;overflow:auto;padding:1.6vh 2vw;font-size:min(2vw,3.6vh);line-height:1.65;
-    color:var(--ink);word-break:keep-all}
+  #openP{position:fixed;right:2.2vw;top:2vh;z-index:6;font:inherit;font-size:min(1.4vw,2.4vh);color:var(--muted);
+    background:transparent;border:1px solid var(--line);border-radius:999px;padding:.6vh 1.2vw;opacity:.55;cursor:pointer}
+  #openP:hover{opacity:1;color:var(--gold)}
+  /* 청중 화면에서 마우스를 3초간 움직이지 않으면 버튼 숨김 */
+  body.idle #home,body.idle #openP{opacity:0;pointer-events:none}
+  body.idle{cursor:none}
+  /* 발표자 창 안의 미리보기(iframe)용 — 조작 요소 없음 */
+  body.view #home,body.view #openP{display:none}
+
+  /* ── 발표자 창 ── */
+  body.presenter{overflow:auto}
+  body.presenter #deck,body.presenter #sec,body.presenter #cnt,body.presenter #bar,
+  body.presenter #home,body.presenter #openP{display:none}
+  #pv{display:none}
+  body.presenter #pv{display:grid;min-height:100vh;padding:14px;gap:14px;
+    grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);
+    grid-template-areas:"hd hd" "cur side" "note note";background:var(--bg)}
+  #pvhd{grid-area:hd;display:flex;gap:12px 22px;flex-wrap:wrap;align-items:center;font-size:15px;color:var(--muted)}
+  #pvhd .clock{font-family:"Noto Serif KR",serif;font-size:34px;color:var(--ink);font-weight:700;letter-spacing:.02em}
+  #pvhd .pos{font-size:20px;color:var(--gold);font-weight:700}
+  #pvhd .late{color:#ff9d8a;font-weight:700} #pvhd .ok{color:#9be0b0;font-weight:700}
+  #pvhd .sp{flex:1}
+  .pbtn{font:inherit;font-size:14px;color:var(--ink);background:#13283d;border:1px solid var(--line);
+    border-radius:8px;padding:7px 12px;cursor:pointer}
+  .pbtn:hover{border-color:var(--gold)}
+  .pbtn.on{background:var(--gold);color:#1a1405;font-weight:700}
+  .frame{position:relative;aspect-ratio:16/9;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000}
+  .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+  .lbl{font-size:13px;color:var(--gold);font-weight:700;letter-spacing:.1em;margin:0 0 6px}
+  #pvcur{grid-area:cur;min-width:0}
+  #pvside{grid-area:side;min-width:0;display:flex;flex-direction:column;gap:14px}
+  #pvnextkey{font-size:15px;color:var(--muted);line-height:1.5}
+  #pvnote{grid-area:note;min-height:24vh;background:#07111c;border:1px solid var(--line);border-top:3px solid var(--gold);
+    border-radius:8px;padding:16px 20px;overflow:auto;line-height:1.7;word-break:keep-all;color:var(--ink)}
+  #pvconn{font-size:13px}
+  #pvconn.off{color:#ff9d8a} #pvconn.on{color:#9be0b0}
 </style>
 </head>
 <body>
@@ -84,7 +108,16 @@
 <div id="sec"></div>
 <div id="cnt"></div>
 <div id="bar"></div>
-<div id="notes"><div id="nhd"></div><div id="nbd"></div></div>
+<button id="openP" type="button" title="발표자 창 열기 (P)">발표자 창 열기</button>
+<div id="pv">
+  <div id="pvhd"></div>
+  <div id="pvcur"><p class="lbl">현재 슬라이드 · 청중 화면</p><div class="frame"><iframe id="fcur" title="현재 슬라이드" tabindex="-1"></iframe></div></div>
+  <div id="pvside">
+    <div><p class="lbl">다음 슬라이드</p><div class="frame"><iframe id="fnext" title="다음 슬라이드" tabindex="-1"></iframe></div></div>
+    <div id="pvnextkey"></div>
+  </div>
+  <div id="pvnote"></div>
+</div>
 
 <script>
 const SECTIONS = [
@@ -213,7 +246,7 @@ S.forEach(s=>{
       <div class="small">15분 강의</div>
       <h1>『참부모론 해설』<br>제1장 하늘부모님과 창조</h1>
       <div class="sub">1. 하늘부모님의 본질</div>
-      <div class="hint">← → 넘김 · F 전체화면 · P 발표자 원고 · T 타이머 · H 목록</div>`;
+      <div class="hint">← → 넘김 · F 전체화면 · P 발표자 창 · H 목록</div>`;
   }else if(s.type==="divider"){
     const d = SECTIONS[s.sec];
     el.classList.add("divider");
@@ -240,79 +273,177 @@ S.forEach(s=>{
 
 const els = [...document.querySelectorAll(".slide")];
 const cnt = document.getElementById("cnt"), bar = document.getElementById("bar"), secEl = document.getElementById("sec");
-const nhd = document.getElementById("nhd"), nbd = document.getElementById("nbd");
+const $ = id => document.getElementById(id);
+
+/* 화면 종류: audience(청중 화면) · presenter(발표자 창) · view(발표자 창 안의 미리보기) */
+const Q = new URLSearchParams(location.search);
+const MODE = Q.has("presenter") ? "presenter" : Q.has("view") ? "view" : "audience";
+document.body.classList.add(MODE);
+const FILE = location.pathname.split("/").pop() || "index.html";
 let cur = 0;
 
-/* 타이머 */
-let running = false, accMs = 0, t0 = 0;
-const elapsed = () => (accMs + (running ? Date.now() - t0 : 0)) / 1000;
-
-function renderNotes(){
-  const s = S[cur];
-  const e = elapsed();
-  const diff = e - s.start;
-  let state = "";
-  if(running || e > 0){
-    const d = Math.round(diff);
-    state = Math.abs(d) <= 10 ? `<span class="ok">일정대로</span>`
-          : d > 0 ? `<span class="late">+${fmt(d)} 지연</span>`
-          : `<span class="ok">−${fmt(-d)} 여유</span>`;
-  }
-  nhd.innerHTML =
-    `<span>${cur+1} / ${S.length}</span>` +
-    `<span>배정 ${fmt(s.time)}</span>` +
-    `<span>계획 ${fmt(s.start)} ~ ${fmt(s.end)} / 총 ${fmt(TOTAL)}</span>` +
-    `<span>경과 ${fmt(e)}${running ? "" : (e>0 ? " (정지)" : " (T로 시작)")}</span>` + state;
+/* 창 사이 연동 — 같은 강의의 청중 화면과 발표자 창이 서로 슬라이드 번호를 주고받음 */
+let pwin = null, bc = null, linked = false;
+try{ bc = new BroadcastChannel("deck:" + location.pathname); bc.onmessage = e => onMsg(e.data); }catch(e){}
+function send(msg){
+  try{ bc && bc.postMessage(msg); }catch(e){}
+  [window.opener, pwin].forEach(w => { try{ if(w && !w.closed && w !== window) w.postMessage({deck:msg}, "*"); }catch(e){} });
+}
+addEventListener("message", e => {
+  if(e.data && e.data.deck && (e.source === window.opener || e.source === pwin)) onMsg(e.data.deck);
+});
+function onMsg(m){
+  if(!m || MODE === "view") return;
+  linked = true;
+  if(m.type === "go") show(m.i, true);
+  else if(m.type === "hello") send({type:"go", i:cur});
+  if(MODE === "presenter") renderConn();
 }
 
-function show(i){
-  cur = Math.max(0, Math.min(els.length-1, i));
-  els.forEach((e,k)=>e.classList.toggle("active", k===cur));
-  cnt.textContent = (cur+1) + " / " + els.length;
-  bar.style.width = ((cur+1)/els.length*100) + "%";
-  secEl.textContent = els[cur].dataset.sec || "";
-  nbd.textContent = S[cur].note;
-  nbd.scrollTop = 0;
-  renderNotes();
-  history.replaceState(null,"","#"+(cur+1));
+function show(i, fromPeer){
+  cur = Math.max(0, Math.min(els.length-1, i|0));
+  if(MODE === "presenter") renderPresenter();
+  else{
+    els.forEach((e,k)=>e.classList.toggle("active", k===cur));
+    cnt.textContent = (cur+1) + " / " + els.length;
+    bar.style.width = ((cur+1)/els.length*100) + "%";
+    secEl.textContent = els[cur].dataset.sec || "";
+  }
+  if(MODE !== "view"){
+    history.replaceState(null, "", location.search + "#" + (cur+1));
+    if(!fromPeer) send({type:"go", i:cur});
+  }
 }
 const next = ()=>show(cur+1), prev = ()=>show(cur-1);
-setInterval(()=>{ if(document.body.classList.contains("notes")) renderNotes(); }, 500);
-
-document.addEventListener("keydown", e=>{
+const NAV_NEXT = ["ArrowRight","ArrowDown","PageDown"," ","Enter"], NAV_PREV = ["ArrowLeft","ArrowUp","PageUp","Backspace"];
+function navKey(e){
   const k = e.key;
-  if(["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(k)){ e.preventDefault(); next(); }
-  else if(["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(k)){ e.preventDefault(); prev(); }
+  if(NAV_NEXT.includes(k)){ e.preventDefault(); next(); }
+  else if(NAV_PREV.includes(k)){ e.preventDefault(); prev(); }
   else if(k==="Home"){ show(0); }
   else if(k==="End"){ show(els.length-1); }
-  else if(k==="p"||k==="P"){ document.body.classList.toggle("notes"); renderNotes(); }
-  else if(k==="t"||k==="T"){
-    if(running){ accMs += Date.now() - t0; running = false; }
-    else { t0 = Date.now(); running = true; }
-    renderNotes();
-  }
-  else if(k==="r"||k==="R"){ running = false; accMs = 0; renderNotes(); }
-  else if(k==="h"||k==="H"){ location.href = "./"; }
-  else if(k==="f"||k==="F"){
-    document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-  }
-});
-document.addEventListener("click", e=>{
-  if(e.target.closest("#notes,#home")) return;
-  (e.clientX < innerWidth/3) ? prev() : next();
-});
-let sx = null;
-document.addEventListener("touchstart", e=>{ sx = e.touches[0].clientX; }, {passive:true});
-document.addEventListener("touchend", e=>{
-  if(sx===null) return;
-  const dx = e.changedTouches[0].clientX - sx;
-  if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
-  sx = null;
-});
+  else return false;
+  return true;
+}
+const hashNum = () => parseInt(location.hash.slice(1),10);
 
-if(new URLSearchParams(location.search).has("notes")) document.body.classList.add("notes");
-const start = parseInt(location.hash.slice(1),10);
-show(isNaN(start) ? 0 : start-1);
+/* ── 청중 화면 ── */
+function openPresenter(quiet){
+  pwin = window.open(FILE + "?presenter#" + (cur+1), "presenter-" + FILE, "width=1200,height=800");
+  if(!pwin && !quiet) alert("팝업이 차단되었습니다. 주소창에서 이 사이트의 팝업을 허용한 뒤 다시 P를 눌러 주세요.");
+  else if(pwin) pwin.focus();
+}
+if(MODE === "audience"){
+  document.addEventListener("keydown", e=>{
+    if(navKey(e)) return;
+    const k = e.key.toLowerCase();
+    if(k==="p") openPresenter();
+    else if(k==="h") location.href = "./";
+    else if(k==="f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  });
+  $("openP").addEventListener("click", ()=>openPresenter());
+  document.addEventListener("click", e=>{
+    if(e.target.closest("#home,#openP")) return;
+    (e.clientX < innerWidth/3) ? prev() : next();
+  });
+  let sx = null;
+  document.addEventListener("touchstart", e=>{ sx = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener("touchend", e=>{
+    if(sx===null) return;
+    const dx = e.changedTouches[0].clientX - sx;
+    if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+    sx = null;
+  });
+  /* 마우스를 3초간 움직이지 않으면 버튼과 커서를 숨김 */
+  let idleT;
+  const wake = ()=>{ document.body.classList.remove("idle"); clearTimeout(idleT); idleT = setTimeout(()=>document.body.classList.add("idle"), 3000); };
+  document.addEventListener("mousemove", wake); wake();
+  show(isNaN(hashNum()) ? 0 : hashNum()-1, true);
+  send({type:"hello"});
+  if(Q.has("notes")) openPresenter(true);
+}
+
+/* ── 미리보기(iframe) ── */
+if(MODE === "view"){
+  addEventListener("hashchange", ()=>show((hashNum()||1)-1));
+  show((hashNum()||1)-1);
+}
+
+/* ── 발표자 창 ── */
+let running = false, accMs = 0, t0 = 0, noteSize = 26;
+const elapsed = () => (accMs + (running ? Date.now() - t0 : 0)) / 1000;
+try{ noteSize = +localStorage.getItem("deck-note-size") || 26; }catch(e){}
+
+function renderConn(){
+  const c = $("pvconn");
+  c.className = linked ? "on" : "off";
+  c.textContent = linked ? "● 청중 화면 연결됨" : "○ 청중 화면 대기 중 — 슬라이드 탭에서 P";
+}
+function renderClock(){
+  const s = S[cur], e = elapsed();
+  $("pclock").textContent = fmt(e);
+  $("pnow").textContent = new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"});
+  $("pplan").textContent = `배정 ${fmt(s.time)} · 계획 ${fmt(s.start)}~${fmt(s.end)} / 총 ${fmt(TOTAL)}`;
+  let st = "";
+  if(running || e > 0){
+    const d = Math.round(e - s.start);
+    st = Math.abs(d) <= 10 ? `<span class="ok">일정대로</span>`
+       : d > 0 ? `<span class="late">+${fmt(d)} 지연</span>` : `<span class="ok">−${fmt(-d)} 여유</span>`;
+  }else st = "T 또는 ‘타이머 시작’";
+  $("pstate").innerHTML = st;
+  const tb = $("ptimer");
+  tb.textContent = running ? "타이머 정지" : (e > 0 ? "타이머 계속" : "타이머 시작");
+  tb.classList.toggle("on", running);
+}
+function renderPresenter(){
+  $("ppos").textContent = (cur+1) + " / " + S.length;
+  $("fcur").src = FILE + "?view#" + (cur+1);
+  const hasNext = cur < S.length-1;
+  $("fnext").parentElement.parentElement.style.display = hasNext ? "" : "none";
+  if(hasNext) $("fnext").src = FILE + "?view#" + (cur+2);
+  $("pvnextkey").textContent = hasNext ? "다음 핵심 한 줄 · " + S[cur+1].key : "마지막 슬라이드입니다.";
+  $("pvnote").textContent = S[cur].note;
+  $("pvnote").style.fontSize = noteSize + "px";
+  $("pvnote").scrollTop = 0;
+  renderClock();
+}
+function timer(a){
+  if(a==="toggle"){ if(running){ accMs += Date.now() - t0; running = false; } else { t0 = Date.now(); running = true; } }
+  else { running = false; accMs = 0; }
+  renderClock();
+}
+function zoom(d){
+  noteSize = Math.max(16, Math.min(48, noteSize + d));
+  $("pvnote").style.fontSize = noteSize + "px";
+  try{ localStorage.setItem("deck-note-size", noteSize); }catch(e){}
+}
+if(MODE === "presenter"){
+  document.title = "발표자 창 · " + document.title;
+  $("pvhd").innerHTML =
+    `<span class="clock" id="pclock"></span><span class="pos" id="ppos"></span>` +
+    `<span id="pplan"></span><span id="pstate"></span><span>현재 시각 <b id="pnow"></b></span><span id="pvconn"></span>` +
+    `<span class="sp"></span>` +
+    `<button class="pbtn" data-a="prev">◀ 이전</button><button class="pbtn" data-a="next">다음 ▶</button>` +
+    `<button class="pbtn" data-a="timer" id="ptimer"></button><button class="pbtn" data-a="reset">리셋</button>` +
+    `<button class="pbtn" data-a="small" title="원고 글자 작게 (−)">가−</button><button class="pbtn" data-a="big" title="원고 글자 크게 (+)">가+</button>`;
+  $("pvhd").addEventListener("click", e=>{
+    const b = e.target.closest("button"); if(!b) return;
+    b.blur();
+    ({prev, next, timer:()=>timer("toggle"), reset:()=>timer("reset"), small:()=>zoom(-2), big:()=>zoom(2)})[b.dataset.a]();
+  });
+  document.addEventListener("keydown", e=>{
+    if(navKey(e)) return;
+    const k = e.key.toLowerCase();
+    if(k==="t") timer("toggle");
+    else if(k==="r") timer("reset");
+    else if(k==="+" || k==="=") zoom(2);
+    else if(k==="-") zoom(-2);
+  });
+  setInterval(renderClock, 500);
+  show(isNaN(hashNum()) ? 0 : hashNum()-1, true);
+  renderConn();
+  send({type:"hello"});
+}
 </script>
 </body>
 </html>
